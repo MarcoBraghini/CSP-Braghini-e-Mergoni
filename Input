@@ -1,5 +1,6 @@
 % Job Shop Scheduling Problem"
-n_jobs = 3;
+n_tasks = 3;
+n_jobs_per_task = 3;
 n_machines = 3;
 job_task_machine = array2d(tasks, jobs, [
 	1, 2, 0,
@@ -7,7 +8,7 @@ job_task_machine = array2d(tasks, jobs, [
 	0, 2, 1
 ]);
 job_task_duration = array2d(tasks, jobs, [
-	76, 73, 72,
-	56, 74, 68,
-	56, 55, 56
+	6, 3, 2,
+	6, 4, 8,
+	6, 5, 6
 ]);
