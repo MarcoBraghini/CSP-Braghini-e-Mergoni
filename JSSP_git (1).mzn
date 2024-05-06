@@ -1,27 +1,27 @@
-%-----------------------------------------------------------------------------%
+%------------------------------------------------------------------------------------------------------------------------%
 % Università degli studi di Brescia
 % Corso di sistemi intelligienti
 % Progetto di Mergoni Alberto e Braghini Marco
-% 11/04/2024
+% Ultima versione: 28/04/2024
 
-% job-shop scheduling problem
-%-----------------------------------------------------------------------------%
+% il job shop scheduling problem
+%------------------------------------------------------------------------------------------------------------------------%
 
 % Parametri
 
-int: n_macchine;                        % Il numero di macchine
 int: n_tasks;                           % Il numero di tasks
 int: n_jobs_per_task;                   % Numero di job per task
+int: n_macchine;                        % Il numero di macchine
 set of int: tasks = 1..n_tasks;
 set of int: jobs = 1..n_jobs_per_task;
 
     % macchine_per_job[task, job] è l'assegnazione delle macchine a ogni job di ogni task.
-array [tasks, jobs] of 0..(n_macchine-1): macchine_per_job = [|1,0,2,1,0|1,2,1,2,0|2,1,1,0,1,|2,2,0,1,1,|1,0,1,0,0,|]; 
+array [tasks, jobs] of 0..(n_macchine-1): macchine_per_job;
 
     % durata_job[task, job] è la durata di ogni job per ogni task.
-array [tasks, jobs] of int: durata_jobs = [|5,3,4,3,3|2,6,3,6,1|5,5,5,2,3|5,4,5,3,3|2,6,5,2,6|]; 
+array [tasks, jobs] of int: durata_jobs;
 
-%-----------------------------------------------------------------------------%
+%------------------------------------------------------------------------------------------------------------------------%
 
 % Variabili
 
@@ -38,9 +38,7 @@ array [tasks, jobs] of var 0.. max_durata: inizio_jobs;
 array [tasks, jobs] of var 0.. max_durata: fine_jobs;
 
     % Tempo di completamento che corrisponde a quando termina l'ultimo job
-var min_durata..max_durata: tempo_completamento;
-
-
+var min_durata..max_durata : tempo_completamento;
 
 %-----------------------------------------------------------------------------%
 % Constraints
@@ -83,7 +81,7 @@ constraint
             true
         endif
     );
-              % Una volta che sto eseguendo un job non posso farne un altro
+              % Definizione della funzione no_overlap con i parametri che ci servono
 predicate no_overlap(var int: t_inizio_a, var int: durata_a, var int: t_inizio_b, var int: durata_b)  =
     ( t_inizio_a + durata_a  <=  t_inizio_b )  \/  ( t_inizio_b + durata_b  <=  t_inizio_a );
 
@@ -101,9 +99,19 @@ constraint forall(i in tasks, j in jobs) (
     fine_jobs[i, j] = inizio_jobs[i, j] + durata_jobs[i, j]
 );
 
+/*% Definizione euristica di ricerca locale (meno performante)
+function var int: objective() =
+    max([inizio_jobs[i, j] + durata_jobs[i, j] | i in tasks, j in jobs]);
+
+constraint tempo_completamento = objective();
+*/
+
 %-----------------------------------------------------------------------------%
-% Cerco la soluzione con il tempo di completamento minore
+%Cerco la soluzione con il tempo di completamento minore
 solve minimize tempo_completamento;
+
+% soluzione con euristica
+%solve :: int_search(inizio_jobs, first_fail, indomain_min, complete) minimize tempo_completamento;
 
 % Stampo il/i risultati
 output [
