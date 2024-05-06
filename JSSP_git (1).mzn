@@ -4,7 +4,7 @@
 % Progetto di Mergoni Alberto e Braghini Marco
 % Ultima versione: 28/04/2024
 
-% il job shop scheduling problem
+% Il job shop scheduling problem
 %------------------------------------------------------------------------------------------------------------------------%
 
 % Parametri
