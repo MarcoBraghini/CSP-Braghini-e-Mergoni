@@ -22,5 +22,4 @@ constraint tempo_completamento < best_tempo_completamento ->
     best_tempo_completamento = tempo_completamento;
 
 % Incrementiamo il contatore delle iterazioni
-constraint
-    iter = iter + step_size;
+constraint iter = iter + step_size;
