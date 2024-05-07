@@ -1,0 +1,26 @@
+% Definizione euristica di plateau search
+
+% Definiamo una variabile per tenere traccia del miglior tempo di completamento trovato finora
+var int: best_tempo_completamento = max_durata; 
+
+% Definiamo il limite massimo di iterazioni per la plateau search
+int: max_iterations = 1000;
+
+% Definiamo il passo di incremento per il plateau search
+int: step_size = 1;
+
+% Inizializziamo un contatore delle iterazioni
+int: iter = 0;
+
+% Implementiamo la plateau search
+constraint
+    iter <= max_iterations /\               % Continuiamo fino a quando non raggiungiamo il numero massimo di iterazioni
+    tempo_completamento < best_tempo_completamento % Continuiamo fino a quando miglioriamo il tempo di completamento;
+
+% Se il tempo di completamento migliora, aggiorniamo il miglior tempo di completamento
+constraint tempo_completamento < best_tempo_completamento ->
+    best_tempo_completamento = tempo_completamento;
+
+% Incrementiamo il contatore delle iterazioni
+constraint
+    iter = iter + step_size;
